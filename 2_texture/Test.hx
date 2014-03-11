@@ -43,15 +43,16 @@ class Test {
 	var camera : Camera;
 
 	function new() {
-		t = 0;
-		keys = [];
 		stage = flash.Lib.current.stage;
+		stage.doubleClickEnabled = true;
+		stage.addEventListener( MouseEvent.DOUBLE_CLICK, onDbClick);
+		return;
+		t = 0;
+		keys = [];		
 		s = stage.stage3Ds[0];
 		s.addEventListener( flash.events.Event.CONTEXT3D_CREATE, onReady );
 		stage.addEventListener( flash.events.KeyboardEvent.KEY_DOWN, onKey.bind(true) );
-		stage.addEventListener( flash.events.KeyboardEvent.KEY_UP, onKey.bind(false) );
-		stage.addEventListener( MouseEvent.DOUBLE_CLICK, onDbClick);
-		stage.doubleClickEnabled = true;
+		stage.addEventListener( flash.events.KeyboardEvent.KEY_UP, onKey.bind(false) );		
 		flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME, update);
 		s.requestContext3D();
 	}
