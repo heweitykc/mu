@@ -25,7 +25,8 @@ package com.core
 		{
 			this.context3D = context3d;
 			_model = model;
-			z = 0.5;
+			z = 1;
+			x = 4;
 			rotationX = 90;
 			rotationY = -180;
 		}
@@ -49,10 +50,15 @@ package com.core
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
-			program = context3D.createProgram();
-			var shaders:Array = ShaderUtil.shader2;
+			var arr:Array = GLSLShader.shader2;
+			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(true);
+			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, arr[0]);
 			
-			program.upload(shaders[0], shaders[1]);
+			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(true);
+			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, arr[1]);
+			
+			program = context3D.createProgram();
+			program.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
 		}
 		
 		private var r:Number=0;
@@ -63,13 +69,13 @@ package com.core
 			rotationZ += 5;
 			
 			var m:Matrix3D = Main.ccamera.m.clone();
+			m.prependTranslation(x, y, z);
+			m.prependScale(scale, scale, scale);
 			m.prependRotation(rotationX, Vector3D.X_AXIS)
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
-			m.prependTranslation(x, y, z);
-			m.prependScale(scale, scale, scale);
-			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, m, true);	
-			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 108, Vector.<Number>([2, 1, 0, 0]));
+			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 1, m, true);	
+			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([1, 0, 0, 0]));
 			
 			if (_model.animation.isOK) {
 				var newv:Vector.<Number> = computeNew(frame);

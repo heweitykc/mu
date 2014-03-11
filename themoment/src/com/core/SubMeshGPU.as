@@ -4,7 +4,7 @@ package com.core
 	import com.mu.*;
 	import flash.display3D.*;
 	import flash.geom.*;
-	import com.shader.Shaders;
+	import com.shader.*;
 
 	public class SubMeshGPU extends Object3D
 	{
@@ -18,15 +18,17 @@ package com.core
 		protected var _rawVertex:Vector.<Number>;
 		protected var _rawIndices:Vector.<uint>;
 		protected var _texture:TextureBase;
-		protected var _model:MuModel;
+		protected var _model:MuModelGPU;
 		
-		public function SubMeshGPU(context3d:Context3D, model:MuModel=null)
+		public function SubMeshGPU(context3d:Context3D, model:MuModelGPU=null)
 		{
 			this.context3D = context3d;
 			_model = model;
-			z = 0.5;
+			z = 1;
+			x = -4;
 			rotationX = 90;
 			rotationY = -180;
+			this.y = 100;
 		}
 		
 		public function upload(rawVertex:Vector.<Number>, rawIndices:Vector.<uint>):void
@@ -48,17 +50,15 @@ package com.core
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
+			var arr:Array = GLSLShader.shader3;
 			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(true);
-			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, Shaders.GLShader[0]);
+			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, arr[0]);
 			
-			var arr:Array = Shaders.GLShader[0].split("\n");
-			trace(GeomTool.formatShader(arr));
 			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(true);
-			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, Shaders.GLShader[1]);
+			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, arr[1]);
 			
 			program = context3D.createProgram();
-			var shaders:Array = ShaderUtil.shader3;
-			program.upload(shaders[0], shaders[1]);
+			program.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
 		}
 		
 		private var r:Number=0;
@@ -73,13 +73,13 @@ package com.core
 				setVC(animateData, i);
 			}
 			var m:Matrix3D = Main.ccamera.m.clone();
+			m.prependTranslation(x, y, z);
+			m.prependScale(scale, scale, scale);
 			m.prependRotation(rotationX, Vector3D.X_AXIS)
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
-			m.prependTranslation(x, y, z);
-			m.prependScale(scale, scale, scale);
-			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([2, 1, 0, 0]));
-			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 1, m, true);
+			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 120, Vector.<Number>([0.5, 1, 2, 0]));
+			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 121, m, true);
 			
 			context3D.setVertexBufferAt(0, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setVertexBufferAt(1, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
@@ -97,12 +97,6 @@ package com.core
 			var v0:Vector.<Number> = data[i];		//6个float
 			var  v1:Vector.<Number> = data[i + 1];	//6个float
 			//if(v1) v0 = v0.concat(v1);			//最后一个可能是空
-			v0[3] *= 0.5;	//shader中需要*0.5
-			v0[4] *= 0.5;
-			v0[5] *= 0.5;
-			v1[3] *= 0.5;	//shader中需要*0.5
-			v1[4] *= 0.5;
-			v1[5] *= 0.5;
 			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, _startIndex + i*2, v0);		//1根骨头用到了2个寄存器
 			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, _startIndex + (i+1)*2, v1);	//1根骨头用到了2个寄存器
 			

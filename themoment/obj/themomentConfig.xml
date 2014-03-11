@@ -17,7 +17,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2014/3/11'</value>
+      <value>'2014/3/12'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -34,15 +34,15 @@
     <accessible>true</accessible>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>D:\newcode\mu\themoment\src</path-element>
-      <path-element>C:\Users\Userz\Downloads\FlashDevelop-4.5.2\Library\AS3\classes</path-element>
+      <path-element>E:\newcode\mu\themoment\src</path-element>
+      <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <library-path append="true">
-      <path-element>D:\newcode\mu\themoment\libs\glsl2agal.swc</path-element>
+      <path-element>E:\newcode\mu\themoment\libs\glsl2agal.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>D:\newcode\mu\themoment\src\Main.as</path-element>
+    <path-element>E:\newcode\mu\themoment\src\Main.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>

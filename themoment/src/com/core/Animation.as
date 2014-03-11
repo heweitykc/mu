@@ -21,9 +21,9 @@ package com.core
 		private var _frames:Array;
 		private var _GPUframes:Array;
 		private var _loader:URLLoader;
-		protected var _model:MuModel;
+		protected var _model:*;
 		
-		public function Animation(model:MuModel) 
+		public function Animation(model:*) 
 		{
 			_model = model;
 		}
@@ -104,8 +104,7 @@ package com.core
 		{
 			frame = frame % _frames.length;
 			var vdata:Vector.<Number> = _GPUframes[frame][boneIndex];
-			var m:Matrix3D = GeomTool.Euler2Matrix(vdata);		//将平移旋转数据转换成矩阵
-			return m.transformVector(new Vector3D(x, y, z));
+			return GeomTool.translateVector(vdata, new Vector3D(x, y, z));
 		}
 		
 		public function getBoneAnimation(frame:int):Array

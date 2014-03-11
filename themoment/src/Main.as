@@ -11,6 +11,7 @@ package
 	import flash.text.*;
 	import flash.ui.*;
 	
+	import com.adobe.glsl2agal.CModule;
 	
 	/**
 	 * 场景渲染 
@@ -18,7 +19,7 @@ package
 	 * 
 	 */
 	
-	[SWF(width=1024, height=768, frameRate=10, backgroundColor=0xFF0000)]
+	[SWF(width=1024, height=768, frameRate=30, backgroundColor=0xFF0000)]
 	public class Main extends Sprite
 	{
 		public static var ccamera:CommonCamera;
@@ -26,6 +27,7 @@ package
 		private var _stats:Stats;
 		private var _camera:CommonCamera;
 		private var _model1:MuModel;
+		private var _model2:MuModelGPU;
 		private var _meshTest:SubMeshTest;
 		private var _tf1:TextField = new TextField();
 		protected var context3D:Context3D;		
@@ -40,6 +42,9 @@ package
 		
 		public function onadd(evt:Event):void
 		{
+			CModule.rootSprite = this;
+			CModule.startAsync();
+			
 			stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, initStage3D);
 			stage.stage3Ds[0].requestContext3D();
 			
@@ -65,10 +70,13 @@ package
 			context3D = stage.stage3Ds[0].context3D;			
 			context3D.configureBackBuffer(1024, 768, 0);
 			
-			_model1 = new MuModel(context3D);
-			_model1.load();
+			//_model1 = new MuModel(context3D);
+			//_model1.load();
 			
-			_meshTest = new SubMeshTest(context3D);
+			_model2 = new MuModelGPU(context3D);
+			_model2.load();
+			
+			//_meshTest = new SubMeshTest(context3D);
 			
 			_camera.init();
 			stage.addEventListener( KeyboardEvent.KEY_DOWN, keyDownEventHandler ); 
@@ -89,8 +97,9 @@ package
 			
 			context3D.clear(0, 0, 0, 1);
 			
-			_meshTest.render(_frame);
+			//_meshTest.render(_frame);
 			//_model1.render(_frame);
+			_model2.render(_frame);
 			
 			//_stats.update(2, 0);
 			

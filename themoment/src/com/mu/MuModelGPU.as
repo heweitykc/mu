@@ -17,7 +17,7 @@ package com.mu
 	 * ...
 	 * @author callee
 	 */
-	public class MuModel
+	public class MuModelGPU
 	{
 		public var screenBMP:Shape = new Shape();
 		
@@ -32,15 +32,15 @@ package com.mu
 		private var _name:String;
 		protected var _animation:Animation;
 		
-		public function MuModel(context3d:Context3D)
+		public function MuModelGPU(context3d:Context3D)
 		{
 			_context3d = context3d;
-			_animation = new Animation(this);
-
+			_animation = new Animation(this)
+			
 			test();
 		}
 		
-		public function load(name:String="Monster32"):void
+		public function load(name:String="Monster210"):void
 		{
 			_name = name;
 			_loader = new URLLoader();
@@ -168,7 +168,7 @@ package com.mu
 					_meshs[key] = { };
 					_meshs[key].vertex =  new Vector.<Number>();
 					_meshs[key].index =  new Vector.<uint>();
-					_meshs[key].submesh = new SubMeshBase(_context3d,this);
+					_meshs[key].submesh = new SubMeshGPU(_context3d,this);
 					_meshs[key].submesh.scale = 0.01;
 					_meshs[key].img = "assets/" + _name + "/" + key;
 					_meshs[key].submesh.img = _meshs[key].img;
