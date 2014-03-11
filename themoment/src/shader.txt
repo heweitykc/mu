@@ -1,0 +1,51 @@
+attribute vec3 position;
+attribute vec3 texcoord;
+
+varying vec2 out_texcoord;
+
+uniform mat4 m;
+uniform vec4 boneData[54*2];
+
+void main()
+{
+	vec4 tvec = boneData[int(texcoord.z)];
+	
+	float dSY = sin(tvec.z);
+	float dSP = sin(tvec.y);
+	float dSR = sin(tvec.x);
+	float dCY = cos(tvec.z);
+	float dCP = cos(tvec.y);
+	float dCR = cos(tvec.x);
+
+	vec4 quat;
+	quat.x = dSR * dCP * dCY - dCR * dSP * dSY;
+	quat.y = dCR * dSP * dCY + dSR * dCP * dSY;
+	quat.z = dCR * dCP * dSY - dSR * dSP * dCY;
+	quat.w = dCR * dCP * dCY + dSR * dSP * dSY;
+
+	vec4 line0;
+	line0.x = 1.0 - 2.0 * quat.y * quat.y - 2.0 * quat.z * quat.z;
+	line0.y = 2.0 * quat.x * quat.y + 2.0 * quat.w * quat.z;
+	line0.z = 2.0 * quat.x * quat.z - 2.0 * quat.w * quat.y;
+	line0.w = 0;
+	
+	vec4 line1;
+	line1.x = 2.0 * quat.x * quat.y - 2.0 * quat.w * quat.z;
+	line1.y = 1.0 - 2.0 * quat.x * quat.x - 2.0 * quat.z * quat.z;
+	line1.z = 2.0 * quat.y * quat.z + 2.0 * quat.w * quat.x;
+	line1.w = 0;
+
+	vec4 line2;
+	line2.x = 2.0 * quat.x * quat.z + 2.0 * quat.w * quat.y;
+	line2.y = 2.0 * quat.y * quat.z - 2.0 * quat.w * quat.x;
+	line2.z = 1.0 - 2.0 * quat.x * quat.x - 2.0 * quat.y * quat.y;
+	line2.w = 0;
+
+	vec4 line3 = boneData[int(texcoord.z+1.0)];
+	line3.w = 1.0;
+	
+	mat4 bonem = mat4(line0,line1,line2,line3);
+	
+	gl_Position = m * (bonem * vec4(position.xyz, 1.0));
+	out_texcoord = texcoord.xy;
+}
