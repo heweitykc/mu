@@ -1,7 +1,5 @@
-
-varying vec4 vertexColor;
-
+in vec3 out_texcoord;
 void main()
 {
-	gl_FragColor = vertexColor;
+   gl_FragColor = vec4(out_texcoord.xyz,1);
 }
