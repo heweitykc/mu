@@ -63,10 +63,15 @@ package com.core
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
-			program = context3D.createProgram();
-			var shaders:Array = ShaderUtil.shader1;
+			var arr:Array = GLSLShader.shader1;
+			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(true);
+			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, arr[0]);
 			
-			program.upload(shaders[0], shaders[1]);
+			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(true);
+			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, arr[1]);
+			
+			program = context3D.createProgram();
+			program.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
 		}
 		
 		private var r:Number=0;

@@ -90,7 +90,7 @@ package
 			context3D.clear(0, 0, 0, 1);
 			
 			_meshTest.render(_frame);
-			_model1.render(_frame);
+			//_model1.render(_frame);
 			
 			//_stats.update(2, 0);
 			
