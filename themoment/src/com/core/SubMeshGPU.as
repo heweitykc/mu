@@ -20,15 +20,17 @@ package com.core
 		protected var _texture:TextureBase;
 		protected var _model:MuModelGPU;
 		
+		private var _usedBones:Array;
+		
 		public function SubMeshGPU(context3d:Context3D, model:MuModelGPU=null)
 		{
 			this.context3D = context3d;
 			_model = model;
 			z = 1;
-			x = -4;
+			x = 0;
 			rotationX = 90;
 			rotationY = -180;
-			this.y = 100;
+			_usedBones = [];
 		}
 		
 		public function upload(rawVertex:Vector.<Number>, rawIndices:Vector.<uint>):void
@@ -43,6 +45,24 @@ package com.core
 			_texture.load(img);
 		}
 		
+		public function addBone(boneIndex:int):void
+		{
+			if (_usedBones.indexOf(boneIndex) < 0) {
+				trace("插入：" + boneIndex);
+				_usedBones.push(boneIndex);
+			}
+		}
+		
+		public function getBoneIIndex(boneIndex:int):int
+		{
+			return _usedBones.indexOf(boneIndex);
+		}
+		
+		public function get BoneCount():int
+		{
+			return _usedBones.length;
+		}
+		
 		private function generate():void
 		{	
 			vertexbuffer = context3D.createVertexBuffer(_rawVertex.length / 6, 6);
@@ -50,57 +70,48 @@ package com.core
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
-			var arr:Array = GLSLShader.shader3;
-			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(true);
-			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, arr[0]);
+			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(false);
+			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, CommonShader.V);
 			
-			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(true);
-			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, arr[1]);
+			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(false);
+			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, CommonShader.F);
 			
 			program = context3D.createProgram();
 			program.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
 		}
 		
-		private var r:Number=0;
+		private var r:Number = 0;
+		private var _boneStart:int = 0;	//vc中的骨骼寄存器的开始索引
 		public function render(frame:int):void
 		{
 			if (!_texture.ok) return;
-			if (!_model.animation.isOK) return;
+			if (!_model.animation.OK) return;
 			
 			//设置该帧的骨骼参数
 			var animateData:Array = _model.animation.getBoneAnimation(frame);
-			for (var i:int = 0; i < animateData.length; i += 2) {
-				setVC(animateData, i);
+			for (var i:int = 0; i < _usedBones.length; i++) {
+				context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, _boneStart + i * 4, animateData[_usedBones[i]], true);
+				trace("animate=" + _usedBones[i]);
 			}
+			trace("骨骼vc:" + _boneStart + "-" + (i-1));
 			var m:Matrix3D = Main.ccamera.m.clone();
 			m.prependTranslation(x, y, z);
 			m.prependScale(scale, scale, scale);
 			m.prependRotation(rotationX, Vector3D.X_AXIS)
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
-			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 120, Vector.<Number>([0.5, 1, 2, 0]));
+			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 120, Vector.<Number>([0.5, 1, 2, 0]));
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 121, m, true);
 			
-			context3D.setVertexBufferAt(0, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
-			context3D.setVertexBufferAt(1, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+			context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+			context3D.setVertexBufferAt(1, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setTextureAt(0, _texture.texture);
 			context3D.setProgram(program);
 			context3D.drawTriangles(indexbuffer);
 			
 			context3D.setVertexBufferAt(0,null);
 			context3D.setVertexBufferAt(1, null);
-		}
-		
-		private var _startIndex:int = 0;
-		private function setVC(data:Array, i:int):void
-		{
-			var v0:Vector.<Number> = data[i];		//6个float
-			var  v1:Vector.<Number> = data[i + 1];	//6个float
-			//if(v1) v0 = v0.concat(v1);			//最后一个可能是空
-			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, _startIndex + i*2, v0);		//1根骨头用到了2个寄存器
-			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, _startIndex + (i+1)*2, v1);	//1根骨头用到了2个寄存器
-			
-			//trace("寄存器" + (_startIndex + i*2) + ",    " + v0.join("|"));
+			context3D.setTextureAt(0, null);
 		}
 	}
 }

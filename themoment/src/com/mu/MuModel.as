@@ -17,7 +17,7 @@ package com.mu
 	 * ...
 	 * @author callee
 	 */
-	public class MuModel
+	public class MuModel extends Object3D
 	{
 		public var screenBMP:Shape = new Shape();
 		

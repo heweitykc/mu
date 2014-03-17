@@ -13,12 +13,11 @@ package com.core
 	{		
 		public var JointTree:Array;			//关节树
 		
-		public var isOK:Boolean = false;
+		public var OK:Boolean = false;
 		
 		private var _animates:Array;
 		private var _nodes:Array;
 		
-		private var _frames:Array;
 		private var _GPUframes:Array;
 		private var _loader:URLLoader;
 		protected var _model:*;
@@ -59,7 +58,6 @@ package com.core
 		private function parse():void
 		{
 			//build animations
-			_frames = [];
 			_GPUframes = [];
 			var nodeLen:int = _nodes.length + 1;
 			var animatelen:int = _animates.length / (_nodes.length + 1);
@@ -84,12 +82,12 @@ package com.core
 					if (parentId > -1)
 						frame[boneid].append(frame[parentId]);
 					if (_model.UsedBones.indexOf(boneid) < 0) continue;	//跳过没用的骨骼
-					GPUframe.push(formatTransform(frame[boneid].decompose(Orientation3D.EULER_ANGLES)));
+					//GPUframe.push(formatTransform(frame[boneid].decompose(Orientation3D.EULER_ANGLES)));
+					GPUframe.push(frame[boneid]);
 				}
-				_frames.push(frame);
 				_GPUframes.push(GPUframe);
 			}
-			isOK = true;
+			OK = true;
 		}
 		
 		private function formatTransform(tdata:Vector.<Vector3D>):Vector.<Number>
@@ -102,14 +100,14 @@ package com.core
 			
 		public function computeVertex(x:Number,y:Number,z:Number,frame:int,boneIndex:int):Vector3D
 		{
-			frame = frame % _frames.length;
+			frame = frame % _GPUframes.length;
 			var vdata:Vector.<Number> = _GPUframes[frame][boneIndex];
 			return GeomTool.translateVector(vdata, new Vector3D(x, y, z));
 		}
 		
 		public function getBoneAnimation(frame:int):Array
 		{
-			frame = frame % _frames.length;
+			frame = frame % _GPUframes.length;
 			return _GPUframes[frame];
 		}
 		
@@ -117,7 +115,7 @@ package com.core
 		
 		public function get len():int
 		{
-			return _frames.length;
+			return _GPUframes.length;
 		}
 	}
 

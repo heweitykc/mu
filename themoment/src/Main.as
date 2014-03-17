@@ -26,11 +26,11 @@ package
 		
 		private var _stats:Stats;
 		private var _camera:CommonCamera;
-		private var _model1:MuModel;
 		private var _model2:MuModelGPU;
 		private var _meshTest:SubMeshTest;
 		private var _tf1:TextField = new TextField();
-		protected var context3D:Context3D;		
+		protected var context3D:Context3D;
+		private var _models:Array;
 		
 		public function Main()
 		{
@@ -59,7 +59,7 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			
 			_stats = new Stats();
-			//addChild(_stats);
+			addChild(_stats);
 			
 			_tf1.textColor = 0xFFFF00;
 			addChild(_tf1);
@@ -70,16 +70,27 @@ package
 			context3D = stage.stage3Ds[0].context3D;			
 			context3D.configureBackBuffer(1024, 768, 0);
 			
-			//_model1 = new MuModel(context3D);
-			//_model1.load();
-			
 			_model2 = new MuModelGPU(context3D);
 			_model2.load();
 			
 			//_meshTest = new SubMeshTest(context3D);
 			
+			//initModels();
+			
 			_camera.init();
 			stage.addEventListener( KeyboardEvent.KEY_DOWN, keyDownEventHandler ); 
+		}
+		
+		private function initModels():void
+		{
+			_models = [];
+			for (var i:int = 0; i < 1; i++) {
+				var mumodel:MuModel = new MuModel(context3D);
+				mumodel.x = int(i%15)*5;
+				mumodel.y = int(i / 15) * 5;
+				_models.push(mumodel);
+				mumodel.load("Monster32");
+			}
 		}
 		
 		protected function keyDownEventHandler(e:KeyboardEvent):void
@@ -98,10 +109,11 @@ package
 			context3D.clear(0, 0, 0, 1);
 			
 			//_meshTest.render(_frame);
-			//_model1.render(_frame);
 			_model2.render(_frame);
-			
-			//_stats.update(2, 0);
+			for each(var mumodel:MuModel in _models) {
+				mumodel.render(_frame);
+			}
+			_stats.update(2, 0);
 			
 			context3D.present();			
 		}

@@ -3,6 +3,7 @@ package com.shader
 	import com.adobe.glsl2agal.CModule;
 	import com.adobe.glsl2agal.compileShader;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 
 	
 	/**
@@ -43,8 +44,11 @@ package com.shader
 			return getShader(BONEVS,BONEFS);
 		}
 		
+		private static var _cache:Dictionary = new Dictionary();
 		private static function getShader(VSCLS:Class,FSCLS:Class):Array
 		{
+			if (_cache[VSCLS]) return _cache[VSCLS];
+			
 			var bts0:ByteArray = new VSCLS;
 			var bts1:ByteArray = new FSCLS;
 			var btsstr0:String = bts0.readMultiByte(bts0.length, "utf-8");
@@ -52,8 +56,9 @@ package com.shader
 			var str0:Object = JSON.parse(getVertexShader(btsstr0));
 			var str1:Object = JSON.parse(getFragmentShader(btsstr1));
 			trace("vshader:\n"+JSON.stringify(str0,null,1));
-			trace("fshader:\n" +JSON.stringify(str1,null,1));
-			return [str0.agalasm,str1.agalasm];
+			trace("fshader:\n" +JSON.stringify(str1, null, 1));
+			_cache[VSCLS] = [str0.agalasm, str1.agalasm];
+			return _cache[VSCLS];
 		}
 		
 		public static function getVertexShader(src:String):String
