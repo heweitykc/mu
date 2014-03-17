@@ -91,9 +91,9 @@ package com.core
 			var animateData:Array = _model.animation.getBoneAnimation(frame);
 			for (var i:int = 0; i < _usedBones.length; i++) {
 				context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, _boneStart + i * 4, animateData[_usedBones[i]], true);
-				trace("animate=" + _usedBones[i]);
+				//trace("animate=" + _usedBones[i]);
 			}
-			trace("骨骼vc:" + _boneStart + "-" + (i-1));
+			//trace("骨骼vc:" + _boneStart + "-" + (i-1));
 			var m:Matrix3D = Main.ccamera.m.clone();
 			m.prependTranslation(x, y, z);
 			m.prependScale(scale, scale, scale);

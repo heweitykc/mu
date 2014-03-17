@@ -135,9 +135,9 @@ package com.mu
 				var gp1:Vector3D = getGlobalPos(Number(p1[1]), Number(p1[2]), Number(p1[3]), uint(p1[0]));
 				var gp2:Vector3D = getGlobalPos(Number(p2[1]), Number(p2[2]), Number(p2[3]), uint(p2[0]));
 				
-				_meshs[key].vertex.push(gp0.x, gp0.y, gp0.z,  Number(p0[7]), 1 - Number(p0[8]),   mesh.getBoneIIndex(bone0Index));
-				_meshs[key].vertex.push(gp1.x, gp1.y, gp1.z,  Number(p1[7]), 1 - Number(p1[8]),   mesh.getBoneIIndex(bone1Index));
-				_meshs[key].vertex.push(gp2.x, gp2.y, gp2.z,  Number(p2[7]), 1 - Number(p2[8]),   mesh.getBoneIIndex(bone2Index));
+				_meshs[key].vertex.push(gp0.x, gp0.y, gp0.z,  Number(p0[7]), 1 - Number(p0[8]),   mesh.getBoneIIndex(bone0Index)*4);
+				_meshs[key].vertex.push(gp1.x, gp1.y, gp1.z,  Number(p1[7]), 1 - Number(p1[8]),   mesh.getBoneIIndex(bone1Index)*4);
+				_meshs[key].vertex.push(gp2.x, gp2.y, gp2.z,  Number(p2[7]), 1 - Number(p2[8]),   mesh.getBoneIIndex(bone2Index)*4);
 				
 				var idx:int = _meshs[key].index.length;
 				_meshs[key].index.push(idx, idx + 1, idx + 2);
@@ -146,7 +146,7 @@ package com.mu
 			for each(var subObj:Object in _meshs) {
 				var sub:SubMeshGPU = subObj.submesh;
 				sub.upload(subObj.vertex, subObj.index);
-				trace(sub.img + ",顶点=" + subObj.vertex.length/6 + ", 骨头=" + sub.BoneCount);
+				//trace(sub.img + ",顶点=" + subObj.vertex.length/6 + ", 骨头=" + sub.BoneCount);
 			}
 			
 			_ok = true;
