@@ -95,7 +95,7 @@ package com.core
 			}
 			//trace("骨骼vc:" + _boneStart + "-" + (i-1));
 			var m:Matrix3D = Main.ccamera.m.clone();
-			m.prependTranslation(x, y, z);
+			m.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
 			m.prependScale(scale, scale, scale);
 			m.prependRotation(rotationX, Vector3D.X_AXIS)
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);

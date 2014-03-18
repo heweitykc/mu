@@ -17,8 +17,9 @@ package com.mu
 	 * ...
 	 * @author callee
 	 */
-	public class MuModelGPU
+	public class MuModelGPU extends Object3D
 	{
+		public var host:String = "http://stage3d.qiniudn.com/assets/";
 		public var screenBMP:Shape = new Shape();
 		
 		public var BindPose:Array ;			//初始pose
@@ -43,7 +44,7 @@ package com.mu
 			_name = name;
 			_loader = new URLLoader();
 			_loader.addEventListener(Event.COMPLETE, onOK);
-			_loader.load(new URLRequest("assets/"+name + "/" + name + ".smd"));
+			_loader.load(new URLRequest(host+name + "/" + name + ".smd"));
 			_loader.dataFormat = URLLoaderDataFormat.TEXT;
 		}
 		public function get animation():Animation
@@ -151,7 +152,7 @@ package com.mu
 			
 			_ok = true;
 			
-			_animation.load("assets/" + _name + "/" + _name + "_001.smd");
+			_animation.load(host + _name + "/" + _name + "_001.smd");
 		}
 		
 		private function getGlobalPos(x:Number, y:Number, z:Number, boneid:uint):Vector3D
@@ -172,7 +173,7 @@ package com.mu
 					_meshs[key].index =  new Vector.<uint>();
 					_meshs[key].submesh = new SubMeshGPU(_context3d,this);
 					_meshs[key].submesh.scale = 0.01;
-					_meshs[key].img = "assets/" + _name + "/" + key;
+					_meshs[key].img = host + _name + "/" + key;
 					_meshs[key].submesh.img = _meshs[key].img;
 				}
 			}

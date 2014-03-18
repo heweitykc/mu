@@ -75,7 +75,7 @@ package
 			
 			//_meshTest = new SubMeshTest(context3D);
 			
-			//initModels();
+			initModels();
 			
 			_camera.init();
 			stage.addEventListener( KeyboardEvent.KEY_DOWN, keyDownEventHandler ); 
@@ -84,8 +84,8 @@ package
 		private function initModels():void
 		{
 			_models = [];
-			for (var i:int = 0; i < 1; i++) {
-				var mumodel:MuModel = new MuModel(context3D);
+			for (var i:int = 0; i < 50; i++) {
+				var mumodel:MuModelGPU = new MuModelGPU(context3D);
 				mumodel.x = int(i%15)*5;
 				mumodel.y = int(i / 15) * 5;
 				_models.push(mumodel);
@@ -110,7 +110,7 @@ package
 			
 			//_meshTest.render(_frame);
 			_model2.render(_frame);
-			for each(var mumodel:MuModel in _models) {
+			for each(var mumodel:MuModelGPU in _models) {
 				mumodel.render(_frame);
 			}
 			_stats.update(2, 0);

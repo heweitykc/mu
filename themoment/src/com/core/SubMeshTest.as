@@ -63,7 +63,7 @@ package com.core
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
-			var arr:Array = GLSLShader.shader1;
+			var arr:Array = [];
 			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(true);
 			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, arr[0]);
 			
