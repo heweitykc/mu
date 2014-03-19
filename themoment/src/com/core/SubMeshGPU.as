@@ -71,10 +71,10 @@ package com.core
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
 			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(false);
-			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, CommonShader.V);
+			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, CommonShader.V1);
 			
 			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(false);
-			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, CommonShader.F);
+			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, CommonShader.F1);
 			
 			program = context3D.createProgram();
 			program.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
@@ -87,21 +87,24 @@ package com.core
 			if (!_texture.ok) return;
 			if (!_model.animation.OK) return;
 			
-			//设置该帧的骨骼参数
-			var animateData:Array = _model.animation.getBoneAnimation(frame);
-			for (var i:int = 0; i < _usedBones.length; i++) {
-				context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, _boneStart + i * 4, animateData[_usedBones[i]], true);
-				//trace("animate=" + _usedBones[i]);
-			}
-			//trace("骨骼vc:" + _boneStart + "-" + (i-1));
 			var m:Matrix3D = Main.ccamera.m.clone();
 			m.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
 			m.prependScale(scale, scale, scale);
 			m.prependRotation(rotationX, Vector3D.X_AXIS)
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
+			
 			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 120, Vector.<Number>([0.5, 1, 2, 0]));
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 121, m, true);
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<Number>([0.98046, 0.84375, 0.375, 0]));	//金色
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([0.299, 0.587, 0.114, 0]));		//求灰度需要的常量 0.299*R+0.587*G+0.114*B
+			
+			//设置该帧的骨骼参数
+			var animateData:Array = _model.animation.getBoneAnimation(frame);
+			for (var i:int = 0; i < _usedBones.length; i++) {
+				context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, _boneStart + i * 4, animateData[_usedBones[i]], true);
+				//trace("animate=" + _usedBones[i]);
+			};
 			
 			context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setVertexBufferAt(1, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
