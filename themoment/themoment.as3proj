@@ -24,7 +24,6 @@
     <option allowSourcePathOverlap="False" />
     <option benchmark="False" />
     <option es="False" />
-    <option inline="False" />
     <option locale="" />
     <option loadConfig="" />
     <option optimize="False" />
@@ -52,7 +51,7 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="libs\glsl2agal.swc" />
+    <!-- example: <element path="..." /> -->
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
@@ -87,7 +86,6 @@
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Default" />
-    <option testMovieCommand="" />
   </options>
   <!-- Plugin storage -->
   <storage />

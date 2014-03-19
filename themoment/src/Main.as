@@ -11,8 +11,6 @@ package
 	import flash.text.*;
 	import flash.ui.*;
 	
-	import com.adobe.glsl2agal.CModule;
-	
 	/**
 	 * 场景渲染 
 	 * @author rajhe
@@ -41,10 +39,7 @@ package
 		}
 		
 		public function onadd(evt:Event):void
-		{
-			CModule.rootSprite = this;
-			CModule.startAsync();
-			
+		{	
 			stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, initStage3D);
 			stage.stage3Ds[0].requestContext3D();
 			
