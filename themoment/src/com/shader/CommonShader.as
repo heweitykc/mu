@@ -15,9 +15,14 @@ package com.shader
 		"mov v0,va1";
 		
 		public static const F1:String = 
-		"mov ft0.xyzw,fc0.xyzx\n" + 
 		"tex ft1, v0, fs0<2d>\n" + 
-		"mov oc,ft0";
+		"mul ft2.xyz, fc1.xyz, ft1.xyz \n" + 	//ft2.xyz=fc1.xyz*ft1.xyz
+		"add ft2.w, ft2.x, ft2.y \n" + 			//ft2.w = ft2.x + ft2.y
+		"add ft2.x, ft2.w, ft2.z \n" + 			//ft2.x = ft2.w + ft2.z
+		"div ft2.w, ft2.x, fc1.w \n" + 			//ft2.w = ft2.x/256(fc1.w)
+		"add ft2.xyz, fc0.xyz, ft2.xxx \n" + 	//ft2.xyz=fc0.xyz * ft2.www
+		"mov ft2.w,fc0.w\n" + 
+		"mov oc,ft2";
 	}
 
 }

@@ -84,7 +84,7 @@ package
 		private function initModels():void
 		{
 			_models = [];
-			for (var i:int = 0; i < 1; i++) {
+			for (var i:int = 0; i < 3; i++) {
 				var mumodel:MuModelGPU = new MuModelGPU(context3D);
 				mumodel.x = int(i%15)*5;
 				mumodel.y = int(i / 15) * 5;
@@ -106,7 +106,7 @@ package
 			_frame++;
 			_camera.loop();
 			
-			context3D.clear(0, 0, 0, 1);
+			context3D.clear(0, 0, 1, 1);
 			
 			//_meshTest.render(_frame);
 			_model2.render(_frame);
