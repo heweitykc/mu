@@ -97,7 +97,7 @@ package com.core
 			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 120, Vector.<Number>([0.5, 1, 2, 0]));
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 121, m, true);
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<Number>([0.9414, 0.6835, 0.004, 1]));		//金色
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([0.299, 0.587, 0.114, 0.8]));		//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    256
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([0.299, 0.587, 0.114, MainUI.instance.slider1.tick]));		//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    256
 			
 			//设置该帧的骨骼参数
 			var animateData:Array = _model.animation.getBoneAnimation(frame);

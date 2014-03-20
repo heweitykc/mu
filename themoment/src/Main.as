@@ -30,22 +30,29 @@ package
 		protected var context3D:Context3D;
 		private var _models:Array;
 		
+		private var _ui:MainUI;
+		
 		public function Main()
 		{
 			super();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onadd);
-			
 		}
 		
 		public function onadd(evt:Event):void
-		{	
+		{				
 			stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, initStage3D);
 			stage.stage3Ds[0].requestContext3D();
 			
 			addEventListener(Event.ENTER_FRAME, onRender);
 			_camera = new CommonCamera(stage);
 			ccamera = _camera;
+		}
+		
+		private function initUI():void
+		{
+			_ui = new MainUI(this);
+			MainUI.instance = _ui;
 		}
 		
 		protected function initStage3D(e:Event):void
