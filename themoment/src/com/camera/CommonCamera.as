@@ -112,11 +112,15 @@ package com.camera
 		
 		public var m:Matrix3D = new Matrix3D();
 		
+		public function get eyePos():Vector3D
+		{
+			return _controller.position;
+		}
+		
 		public function loop():void
 		{
 			operate();
 			m.identity();
-			m.appendTranslation(0, 0, 12);
 			m.append(_controller.viewMatrix);
 			m.append(projectionTransform);
 		}

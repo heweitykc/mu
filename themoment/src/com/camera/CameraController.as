@@ -21,7 +21,7 @@ package com.camera
 		public function CameraController(type:uint)
 		{
 			_cameraType = type;
-			_pos =   new Vector3D(0,0,-10);
+			_pos =   new Vector3D(0,0,-20);
 			_right = new Vector3D(1,0,0);
 			_up =    new Vector3D(0,1,0);
 			_look =  new Vector3D(0,0,1);

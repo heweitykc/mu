@@ -47,7 +47,7 @@ package com.adobe.utils
 
 	public class Stats extends Sprite {
         protected const WIDTH:uint = 80;
-        protected const HEIGHT:uint = 100;
+        protected const HEIGHT:uint = 70;
 
         protected var xml:XML;
 
@@ -101,7 +101,7 @@ package com.adobe.utils
 
             text = new TextField();
             text.width = WIDTH;
-            text.height = 120;
+            text.height = 70;
             text.styleSheet = style;
             text.condenseWhite = true;
             text.selectable = false;

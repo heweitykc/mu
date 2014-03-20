@@ -119,7 +119,9 @@ package
 			}
 			_stats.update(2, 0);
 			
-			context3D.present();			
+			context3D.present();
+			
+			_ui.label1.text = _ui.slider1.value.toFixed(4);
 		}
 	}
 }

@@ -8,6 +8,8 @@ package com.core
 
 	public class SubMeshGPU extends Object3D
 	{
+		public static const VERTEX_LEN:int = 9;
+		
 		public var img:String;
 		
 		protected var context3D:Context3D;
@@ -65,10 +67,10 @@ package com.core
 		
 		private function generate():void
 		{	
-			vertexbuffer = context3D.createVertexBuffer(_rawVertex.length / 6, 6);
+			vertexbuffer = context3D.createVertexBuffer(_rawVertex.length / VERTEX_LEN, VERTEX_LEN);
+			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / VERTEX_LEN);
 			indexbuffer = context3D.createIndexBuffer(_rawIndices.length);						
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
-			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
 			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(false);
 			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, CommonShader.V1);
@@ -87,6 +89,8 @@ package com.core
 			if (!_texture.ok) return;
 			if (!_model.animation.OK) return;
 			
+			rotationZ += 1;
+			
 			var m:Matrix3D = Main.ccamera.m.clone();
 			m.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
 			m.prependScale(scale, scale, scale);
@@ -94,11 +98,24 @@ package com.core
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
 			
-			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 120, Vector.<Number>([0.5, 1, 2, 0]));
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 121, m, true);
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<Number>([0.9414, 0.6835, 0.004, 1]));		//金色
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([0.299, 0.587, 0.114, MainUI.instance.slider1.value]));		//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    256
 			
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, 
+				Vector.<Number>([0.9414, 0.6835, 0.004, 1]));	//金色
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, 
+				Vector.<Number>([0.299, 0.587, 0.114, MainUI.instance.slider1.value]));	//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    灰度系数
+			var eye:Vector3D = Main.ccamera.eyePos;
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
+				Vector.<Number>([eye.x, eye.y, eye.z, 0]));	//观察者向量
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 3, 
+				Vector.<Number>([0, 0, 0, 0])); 			//光源的法向量
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 4, 
+				Vector.<Number>([0, 0, 0, 0])); //材料的光泽度
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
+				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 6, 
+				Vector.<Number>([1, 1, 1, 1])); //材料的反射颜色
+				
 			//设置该帧的骨骼参数
 			var animateData:Array = _model.animation.getBoneAnimation(frame);
 			for (var i:int = 0; i < _usedBones.length; i++) {
@@ -106,8 +123,12 @@ package com.core
 				//trace("animate=" + _usedBones[i]);
 			};
 			
+			
+			
+			
 			context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setVertexBufferAt(1, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
+			context3D.setVertexBufferAt(2, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setTextureAt(0, _texture.texture);
 			context3D.setProgram(program);
 			context3D.drawTriangles(indexbuffer);
