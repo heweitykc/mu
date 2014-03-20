@@ -35,12 +35,14 @@ package
 		public function Main()
 		{
 			super();
-			
+	
 			addEventListener(Event.ADDED_TO_STAGE, onadd);
 		}
 		
 		public function onadd(evt:Event):void
-		{				
+		{			
+			initUI();
+			
 			stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, initStage3D);
 			stage.stage3Ds[0].requestContext3D();
 			

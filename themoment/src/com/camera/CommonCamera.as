@@ -33,7 +33,9 @@ package com.camera
 		}
 		
 		protected function mouseDownHandler(e:MouseEvent):void
-		{
+		{			
+			if (e.target != _stage) return;
+			
 			_stage.addEventListener(MouseEvent.MOUSE_MOVE,mouseMoveHandler);
 			_stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			_stage.addEventListener(Event.MOUSE_LEAVE,mouseUpHandler);
@@ -43,6 +45,7 @@ package com.camera
 		
 		protected function mouseMoveHandler(e:MouseEvent):void
 		{
+			if (!e.buttonDown) return;
 			var dx:Number = _stage.mouseX - _p0.x;
 			var dy:Number = _stage.mouseY - _p0.y;
 			_controller.yaw(dx/40);
