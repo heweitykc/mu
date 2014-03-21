@@ -77,7 +77,7 @@ package
 			_model2 = new MuModelGPU(context3D);
 			_model2.load();
 			
-			//_meshTest = new SubMeshTest(context3D);
+			_meshTest = new SubMeshTest(context3D);
 			
 			initModels();
 			
@@ -88,10 +88,12 @@ package
 		private function initModels():void
 		{
 			_models = [];
-			for (var i:int = 0; i < 3; i++) {
+			for (var i:int = 0; i < 1; i++) {
 				var mumodel:MuModelGPU = new MuModelGPU(context3D);
 				mumodel.x = int(i%15)*5;
 				mumodel.y = int(i / 15) * 5;
+				mumodel.x = 0;
+				mumodel.y = 0;
 				_models.push(mumodel);
 				mumodel.load("Monster32");
 			}
@@ -112,7 +114,11 @@ package
 			
 			context3D.clear(0, 0, 1, 1);
 			
-			//_meshTest.render(_frame);
+			_meshTest.x = _ui.sliderx.value;
+			_meshTest.y = _ui.slidery.value;
+			_meshTest.z = _ui.sliderz.value;
+			
+			_meshTest.render(_frame);
 			_model2.render(_frame);
 			for each(var mumodel:MuModelGPU in _models) {
 				mumodel.render(_frame);
@@ -121,7 +127,18 @@ package
 			
 			context3D.present();
 			
-			_ui.label1.text = _ui.slider1.value.toFixed(4);
+			var eye:Vector3D = Main.ccamera.eyePos;
+			_ui.label1.text = "灰度：" + _ui.slider1.value.toFixed(2)  + ","
+				+ "   材料光泽:" 
+				+ _ui.slider2.value.toFixed(2) + ","
+				+ "   光源:" 
+				+ _ui.sliderx.value.toFixed(2) + ", "
+				+ _ui.slidery.value.toFixed(2) + ", "
+				+ _ui.sliderz.value.toFixed(2)
+				+ "   观察者:" 
+				+ eye.x.toFixed(2) + ", "
+				+ eye.y.toFixed(2) + ", "
+				+ eye.z.toFixed(2)
 		}
 	}
 }

@@ -64,6 +64,7 @@ package com.camera
 		
 		protected function keyDownEventHandler(e:KeyboardEvent):void
 		{
+			if (e.target != _stage) return;
 			_keyDown[e.keyCode] = true;
 		}
 		
@@ -95,6 +96,7 @@ package com.camera
 		
 		protected function keyUpEventHandler(e:KeyboardEvent):void
 		{
+			if (e.target != _stage) return;
 			_keyDown[e.keyCode] = false;			
 		}
 		

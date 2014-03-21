@@ -28,7 +28,7 @@ package com.core
 		{
 			this.context3D = context3d;
 			_model = model;
-			z = 1;
+			z = 0;
 			x = 0;
 			rotationX = 90;
 			rotationY = -180;
@@ -89,7 +89,7 @@ package com.core
 			if (!_texture.ok) return;
 			if (!_model.animation.OK) return;
 			
-			rotationZ += 1;
+			//rotationZ += 1;
 			
 			var m:Matrix3D = Main.ccamera.m.clone();
 			m.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
@@ -100,21 +100,26 @@ package com.core
 			
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 121, m, true);
 			
+			var ui:MainUI = MainUI.instance;
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, 
 				Vector.<Number>([0.9414, 0.6835, 0.004, 1]));	//金色
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, 
-				Vector.<Number>([0.299, 0.587, 0.114, MainUI.instance.slider1.value]));	//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    灰度系数
+				Vector.<Number>([0.299, 0.587, 0.114, ui.slider1.value]));	//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    灰度系数
+			
 			var eye:Vector3D = Main.ccamera.eyePos;
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
-				Vector.<Number>([eye.x, eye.y, eye.z, 0]));	//观察者向量
+				Vector.<Number>([eye.x, eye.y, eye.z, 0]));												//观察者向量
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 3, 
-				Vector.<Number>([0, 0, 0, 0])); 			//光源的法向量
+				Vector.<Number>([ui.sliderx.value, ui.slidery.value, ui.sliderz.value, 0])); 			//光源向量
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 4, 
-				Vector.<Number>([0, 0, 0, 0])); //材料的光泽度
+				Vector.<Number>([MainUI.instance.slider2.value, 0, 0, 0])); //材料的光泽度
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
-				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色
+				Vector.<Number>([0.1, 0.1, 0.1, 1])); //镜面的反射颜色
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 6, 
-				Vector.<Number>([1, 1, 1, 1])); //材料的反射颜色
+				Vector.<Number>([0.1, 0.1, 0.1, 1])); //材料的反射颜色
+				
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 27, 
+				Vector.<Number>([2, 0, 0, 0])); 	  //计算常量
 				
 			//设置该帧的骨骼参数
 			var animateData:Array = _model.animation.getBoneAnimation(frame);
@@ -122,10 +127,7 @@ package com.core
 				context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, _boneStart + i * 4, animateData[_usedBones[i]], true);
 				//trace("animate=" + _usedBones[i]);
 			};
-			
-			
-			
-			
+
 			context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setVertexBufferAt(1, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
 			context3D.setVertexBufferAt(2, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
@@ -135,6 +137,7 @@ package com.core
 			
 			context3D.setVertexBufferAt(0,null);
 			context3D.setVertexBufferAt(1, null);
+			context3D.setVertexBufferAt(2, null);
 			context3D.setTextureAt(0, null);
 		}
 	}

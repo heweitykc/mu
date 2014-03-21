@@ -63,12 +63,11 @@ package com.core
 			indexbuffer.uploadFromVector(_rawIndices, 0, _rawIndices.length);
 			vertexbuffer.uploadFromVector(_rawVertex, 0, _rawVertex.length / 6);
 			
-			var arr:Array = [];
 			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler(true);
-			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, arr[0]);
+			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, CommonShader.V0);
 			
 			var fragmentShaderAssembler:AGALMiniAssembler= new AGALMiniAssembler(true);
-			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, arr[1]);
+			fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, CommonShader.F0);
 			
 			program = context3D.createProgram();
 			program.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
@@ -77,15 +76,13 @@ package com.core
 		private var r:Number=0;
 		public function render(frame:int):void
 		{
-			rotationY += 15;
-			rotationZ += 15;
 			var m:Matrix3D = Main.ccamera.m.clone();
 			m.prependRotation(rotationX, Vector3D.X_AXIS)
 			m.prependRotation(rotationY, Vector3D.Y_AXIS);
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
 			m.prependTranslation(x, y, z);
 			m.prependScale(scale, scale, scale);
-			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([1,2,0,0]));
+			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([1,2,0,0]));
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 1, m, true);
 			
 			context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
@@ -94,8 +91,8 @@ package com.core
 			context3D.drawTriangles(indexbuffer);
 			
 			//clear
-			//context3D.setVertexBufferAt(0,null);
-			//context3D.setVertexBufferAt(1, null);
+			context3D.setVertexBufferAt(0,null);
+			context3D.setVertexBufferAt(1, null);
 		}
 		
 		private function computeNew(frame:int):Vector.<Number> {
