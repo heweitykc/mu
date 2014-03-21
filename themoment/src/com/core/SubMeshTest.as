@@ -82,7 +82,7 @@ package com.core
 			m.prependRotation(rotationZ, Vector3D.Z_AXIS)
 			m.prependTranslation(x, y, z);
 			m.prependScale(scale, scale, scale);
-			//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([1,2,0,0]));
+			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([1,2,0,0]));
 			context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 1, m, true);
 			
 			context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);

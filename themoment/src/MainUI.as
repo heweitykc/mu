@@ -29,6 +29,7 @@ package
 			slider1.height = 300;
 			slider1.maximum = 1;
 			slider1.minimum = -1;
+			slider1.value = 1;
 			
 			label1 = new TextField();
 			label1.x = 100;
@@ -56,8 +57,8 @@ package
 			
 			sliderz = new VSlider(_content, 75, 150);
 			sliderz.height = 300;
-			sliderz.maximum = 10;
-			sliderz.minimum = -10;
+			sliderz.maximum = 5;
+			sliderz.minimum = -5;
 			sliderz.value = -5;
 		}
 	}

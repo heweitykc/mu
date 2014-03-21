@@ -114,9 +114,7 @@ package com.core
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 4, 
 				Vector.<Number>([MainUI.instance.slider2.value, 0, 0, 0])); //材料的光泽度
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
-				Vector.<Number>([0.1, 0.1, 0.1, 1])); //镜面的反射颜色
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 6, 
-				Vector.<Number>([0.1, 0.1, 0.1, 1])); //材料的反射颜色
+				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色
 				
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 27, 
 				Vector.<Number>([2, 0, 0, 0])); 	  //计算常量

@@ -6,7 +6,7 @@ package com.shader
 	 */
 	public class CommonShader 
 	{
-		public static const V0:String = "m44 op, va0, vc1\n" + "mov v0,va1";
+		public static const V0:String = "m44 op, va0, vc1\n" + "mov v0,va1\n"+ "mov v0.w,vc0.w\n";
 		public static const F0:String = "mov oc, v0";
 		
 		public static const V:String = "m44 vt0.xyzw,va0.xyzw,vc[va1.z]\n" + "m44 op,vt0,vc121\n" + "mov v0,va1";
@@ -28,7 +28,6 @@ package com.shader
 			fc3	 光源向量	l
 			fc4	 材料的光泽度	m_gls
 			fc5	 镜面的反射颜色	S_spec
-			fc6	 材料的反射颜色	M_spec
 			fc27 常量[2,0,0,0]
 		*/
 		public static const F1:String = 
@@ -53,11 +52,11 @@ package com.shader
 		"mul ft1.xyz, fc2.xyz, ft0.xyz\n" +			//v*r
 		"pow ft0.xyz, ft1.xyz, fc4.xxx\n" +			//pow(v*r, m_gls)
 		"mul ft1.xyz, ft0.xyz, fc5.xyz\n" +			//pow(v*r, m_gls) * S_spec
-		"mul ft0.xyz, ft1.xyz, fc6.xyz\n" +			//pow(v*r, m_gls) * S_spec * M_spec
-		"mul ft1.xyz, ft0.xyz, ft2.xyz\n" +			//系数 * ft2
-		"mov ft1.w, fc0.w\n" +						//w=1
+		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +			//pow(v*r, m_gls) * S_spec * M_spec
+		//"mul ft1.xyz, ft0.xyz, ft2.xyz\n" +		//系数 * ft2
+		//"mov ft0.w, fc0.w\n" +						//w=1
 
-		"mov oc,ft1";
+		"mov oc,ft0";
 	}
 }
 /*
