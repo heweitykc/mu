@@ -24,8 +24,7 @@ package com.shader
 			
 			fc0  金色
 			fc1  求灰度的常量
-			fc2	 观察者向量		v
-			fc3	 光源向量	l
+			fc2	 v,l的中间向量	h
 			fc4	 材料的光泽度	m_gls
 			fc5	 镜面的反射颜色	S_spec
 			fc27 常量[2,0,0,0]
@@ -40,22 +39,11 @@ package com.shader
 		"mov ft2.w,fc0.w\n" + 
 		//ft2 材料的颜色
 
-
-		//lighting
-		"mul ft0.xyz,v1.xyz,fc3.xyz\n" + 		// n*l
-		"mul ft1.xyz,v1.xyz,ft0.xyz\n" + 		//(n*l)*n
-		"mul ft1.xyz,fc27.xxx,ft1.xyz\n" + 		//(n*l)*n*2
-		"sub ft4.xyz,ft1.xyz,fc3.xyz\n" + 		//(n*l)*n*2 - l
-		"nrm ft0.xyz, ft4.xyz\n"		+
-		// ft0  反射向量r
-		
-		"mul ft1.xyz, fc2.xyz, ft0.xyz\n" +			//v*r
-		"pow ft0.xyz, ft1.xyz, fc4.xxx\n" +			//pow(v*r, m_gls)
-		"mul ft1.xyz, ft0.xyz, fc5.xyz\n" +			//pow(v*r, m_gls) * S_spec
-		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +			//pow(v*r, m_gls) * S_spec * M_spec
-		//"mul ft1.xyz, ft0.xyz, ft2.xyz\n" +		//系数 * ft2
-		//"mov ft0.w, fc0.w\n" +						//w=1
-
+		"dp3 ft1, v1.xyz, fc2.xyz\n" +			//n.h
+		"pow ft0.x, ft1.x, fc4.x\n" +			//pow(n*h, m_gls)
+		"mul ft1.xyz, ft0.xxx, fc5.xyz\n" +			//pow(n*h, m_gls) * S_spec
+		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +		//pow(n*h, m_gls) * S_spec * M_spec
+		"mov ft0.w,fc0.w\n" + 
 		"mov oc,ft0";
 	}
 }
@@ -73,12 +61,12 @@ D = D_spec + D_diff + D_amb
 v 		观察者向量
 n		表面法向量
 l		光源的法向量
-r 		反射向量  = 2(n*l)n - l
+h 		v,l的中间向量 v+l/|v+l|
 m_gls	材料的光泽度
 S_spec  镜面反射颜色
 M_spec	材料的反射颜色
 
-D_spec = pow(v*r, m_gls) * S_spec * M_spec
+D_spec = pow((n*h),m_gls) * S_spec * M_spec
 
 D_diff = 
 D_amb = 

@@ -107,12 +107,23 @@ package com.core
 				Vector.<Number>([0.299, 0.587, 0.114, ui.slider1.value]));	//求灰度需要的常量 0.299*R+0.587*G+0.114*B   ,    灰度系数
 			
 			var eye:Vector3D = Main.ccamera.eyePos;
+			var lvec:Vector3D = new Vector3D(ui.sliderx.value, ui.slidery.value, ui.sliderz.value);
+			var tn:Matrix3D = new Matrix3D();
+			tn.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
+			tn.prependScale(scale, scale, scale);
+			tn.prependRotation(rotationX, Vector3D.X_AXIS)
+			tn.prependRotation(rotationY, Vector3D.Y_AXIS);
+			tn.prependRotation(rotationZ, Vector3D.Z_AXIS)
+			
+			var h:Vector3D = GeomTool.computeLH(tn.transformVector(eye), tn.transformVector(lvec));
+			trace("h="+h.x+","+h.y+","+h.z);
+			
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
-				Vector.<Number>([eye.x, eye.y, eye.z, 0]));												//观察者向量
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 3, 
-				Vector.<Number>([ui.sliderx.value, ui.slidery.value, ui.sliderz.value, 0])); 			//光源向量
+				Vector.<Number>([h.x, h.y, h.z, 0]));												// h
+				
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 4, 
 				Vector.<Number>([MainUI.instance.slider2.value, 0, 0, 0])); //材料的光泽度
+				
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
 				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色
 				

@@ -99,6 +99,17 @@ package com.core
 			}
 			return str;
 		}
+		
+		public static function computeLH(v:Vector3D, l:Vector3D):Vector3D
+		{
+			var nr:Vector3D = v.clone();
+			var nl:Vector3D = l.clone();
+			nr.normalize();
+			nl.normalize();
+			var r:Vector3D = nr.add(nl);
+			r.normalize();
+			return r;
+		}
 	}
 
 }
