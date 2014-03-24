@@ -111,11 +111,12 @@ package com.core
 			var tn:Matrix3D = new Matrix3D();
 			tn.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
 			tn.prependScale(scale, scale, scale);
-			tn.prependRotation(rotationX, Vector3D.X_AXIS)
+			tn.prependRotation(rotationX, Vector3D.X_AXIS);
 			tn.prependRotation(rotationY, Vector3D.Y_AXIS);
-			tn.prependRotation(rotationZ, Vector3D.Z_AXIS)
+			tn.prependRotation(rotationZ, Vector3D.Z_AXIS);
 			
 			var h:Vector3D = GeomTool.computeLH(tn.transformVector(eye), tn.transformVector(lvec));
+			h.normalize();
 			trace("h="+h.x+","+h.y+","+h.z);
 			
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
@@ -126,9 +127,6 @@ package com.core
 				
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
 				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色
-				
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 27, 
-				Vector.<Number>([2, 0, 0, 0])); 	  //计算常量
 				
 			//设置该帧的骨骼参数
 			var animateData:Array = _model.animation.getBoneAnimation(frame);

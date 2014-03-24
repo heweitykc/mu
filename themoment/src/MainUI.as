@@ -42,7 +42,7 @@ package
 			slider2 = new VSlider(_content, 30, 150);
 			slider2.height = 300;
 			slider2.maximum = 1;
-			slider2.minimum = 0;
+			slider2.minimum = 5;
 			
 			sliderx = new VSlider(_content, 45, 150);
 			sliderx.height = 300;
