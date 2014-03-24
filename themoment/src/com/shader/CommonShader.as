@@ -24,7 +24,7 @@ package com.shader
 			
 			fc0  金色
 			fc1  求灰度的常量
-			fc2	 v,l的中间向量	h
+			fc2	 v,l的中间向量	h  fc2.w=|h|
 			fc4	 材料的光泽度	m_gls
 			fc5	 镜面的反射颜色	S_spec
 			fc27 常量[2,0,0,0]
@@ -39,10 +39,10 @@ package com.shader
 		"mov ft2.w,fc0.w\n" + 
 		//ft2 材料的颜色
 
-		"dp3 ft1, v1.xyz, fc2.xyz\n" +			//n.h
-		"pow ft0.x, ft1.x, fc4.x\n" +			//pow(n*h, m_gls)
-		"mul ft1.xyz, ft0.xxx, fc5.xyz\n" +			//pow(n*h, m_gls) * S_spec
-		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +		//pow(n*h, m_gls) * S_spec * M_spec
+		"dp3 ft1, v1.xyz, fc2.xyz\n" +				// n.h
+		"pow ft0.x, ft1.x, fc4.x\n" +				//pow(n.h, m_gls)
+		"mul ft1.xyz, ft0.xxx, fc5.xyz\n" +			//pow(n.h, m_gls) * S_spec
+		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +		//pow(n.h, m_gls) * S_spec * M_spec
 		"mov ft0.w,fc0.w\n" + 
 		"mov oc,ft0";
 	}

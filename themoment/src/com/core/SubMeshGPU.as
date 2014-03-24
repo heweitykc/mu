@@ -116,7 +116,7 @@ package com.core
 			tn.prependRotation(rotationZ, Vector3D.Z_AXIS)
 			
 			var h:Vector3D = GeomTool.computeLH(tn.transformVector(eye), tn.transformVector(lvec));
-			trace("h="+h.x+","+h.y+","+h.z);
+			h.normalize();			
 			
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
 				Vector.<Number>([h.x, h.y, h.z, 0]));												// h
@@ -126,9 +126,6 @@ package com.core
 				
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
 				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色
-				
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 27, 
-				Vector.<Number>([2, 0, 0, 0])); 	  //计算常量
 				
 			//设置该帧的骨骼参数
 			var animateData:Array = _model.animation.getBoneAnimation(frame);
