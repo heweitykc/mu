@@ -111,13 +111,12 @@ package com.core
 			var tn:Matrix3D = new Matrix3D();
 			tn.prependTranslation(x + _model.x, y + _model.y, z + _model.z);
 			tn.prependScale(scale, scale, scale);
-			tn.prependRotation(rotationX, Vector3D.X_AXIS);
+			tn.prependRotation(rotationX, Vector3D.X_AXIS)
 			tn.prependRotation(rotationY, Vector3D.Y_AXIS);
-			tn.prependRotation(rotationZ, Vector3D.Z_AXIS);
+			tn.prependRotation(rotationZ, Vector3D.Z_AXIS)
 			
 			var h:Vector3D = GeomTool.computeLH(tn.transformVector(eye), tn.transformVector(lvec));
-			h.normalize();
-			trace("h="+h.x+","+h.y+","+h.z);
+			h.normalize();			
 			
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
 				Vector.<Number>([h.x, h.y, h.z, 0]));												// h

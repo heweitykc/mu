@@ -41,8 +41,8 @@ package
 			
 			slider2 = new VSlider(_content, 30, 150);
 			slider2.height = 300;
-			slider2.maximum = 1;
-			slider2.minimum = 5;
+			slider2.maximum = 100;
+			slider2.minimum = 1;
 			
 			sliderx = new VSlider(_content, 45, 150);
 			sliderx.height = 300;
@@ -51,8 +51,8 @@ package
 			
 			slidery = new VSlider(_content, 60, 150);
 			slidery.height = 300;
-			slidery.maximum = 10;
-			slidery.minimum = -10;
+			slidery.maximum = 2;
+			slidery.minimum = -2;
 			slidery.value = 5;
 			
 			sliderz = new VSlider(_content, 75, 150);
