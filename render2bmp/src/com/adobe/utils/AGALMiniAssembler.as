@@ -1,4 +1,3 @@
-
 /*
 Copyright (c) 2011, Adobe Systems Incorporated
 All rights reserved.
@@ -194,9 +193,8 @@ package com.adobe.utils
 				
 				if ( !regs || regs.length != opFound.numRegister )
 				{
-					//_error = "error: wrong number of operands. found "+regs.length+" but expected "+opFound.numRegister+".";
-					//break;
-					
+					_error = "error: wrong number of operands. found "+regs.length+" but expected "+opFound.numRegister+".";
+					break;					
 				}
 				
 				var badreg:Boolean	= false;

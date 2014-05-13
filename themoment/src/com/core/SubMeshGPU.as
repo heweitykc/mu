@@ -121,8 +121,9 @@ package com.core
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, 
 				Vector.<Number>([h.x, h.y, h.z, 0]));												// h
 				
+			var gloss:Number = MainUI.instance.slider2.value / MainUI.instance.slider2.maximum;
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 4, 
-				Vector.<Number>([MainUI.instance.slider2.value, 0, 0, 0])); //材料的光泽度
+				Vector.<Number>([gloss, 0, 0, 0])); //材料的光泽度
 				
 			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 5, 
 				Vector.<Number>([1, 1, 1, 1])); //镜面的反射颜色

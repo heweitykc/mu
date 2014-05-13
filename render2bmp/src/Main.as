@@ -22,6 +22,9 @@ package
 		[Embed(source="7.png")]
 		public static var BallImage1:Class;
 		
+		[Embed(source="dengni27.png")]
+		public static var BallImage2:Class;
+		
         public const viewWidth:Number = 1024;
         public const viewHeight:Number = 512;
         
@@ -31,11 +34,12 @@ package
         private var indexList:IndexBuffer3D;
         private var vertexes:VertexBuffer3D;
 		private var texture0:Texture;
+		private var texture1:Texture;
         private var renderedBitmapData:BitmapData;
 		
         private const VERTEX_SHADER:String =
 			"mul vt0.xyzw, va0.xyzw, vc0.xyzx \n" + 
-            "mov op, vt0  \n" +    					//copy position to output 
+            "mov op, va0  \n" +    					//copy position to output 
 			//"sge v1.xyzw, va0.x, vc0.x   \n" +    //如果x>mousex，则v1=1
 			//"sub v1.xyzw, vc0.xxxx, va0.xxxx \n" + 
             //"mul v0.xyzw, va1.xywx, vc0.xyzx \n" ;  //copy uv to varying variable v0
@@ -73,7 +77,7 @@ package
             renderContext.configureBackBuffer( viewWidth, viewHeight, 0, false );
             
             //Create vertex index list for the triangles
-            var triangles:Vector.<uint> = Vector.<uint>( [ 0, 1, 2, 0, 2, 3] );
+            var triangles:Vector.<uint> = Vector.<uint>( [ 0, 1, 2, 0, 2, 3, 0+4, 1+4, 2+4, 0+4, 2+4, 3+4] );
             indexList = renderContext.createIndexBuffer( triangles.length );
             indexList.uploadFromVector( triangles, 0, triangles.length );
             
@@ -85,7 +89,12 @@ package
                      1, 1, 0,   1,0,0,
                     -1, 1, 0,   0,0,1,
                     -1, -1, 0,  0,1,1,
-                    1,-1, 0,    1,1,0
+                    1, -1, 0,    1, 1, 0,
+					
+					0.7*0.5, 0.7, 0,   0.7,0,0,
+                    -0.7*0.5, 0.7, 0,   0,0,0.7,
+                    -0.7*0.5, -0.7, 0,  0,0.7,0.7,
+                    0.7*0.5,-0.7, 0,    0.7,0.7,0
                 ]
             );
             vertexes = renderContext.createVertexBuffer( vertexData.length/dataPerVertex, dataPerVertex );
@@ -98,12 +107,13 @@ package
 			texture0 = renderContext.createTexture(1024, 512, Context3DTextureFormat.BGRA,false);
 			texture0.uploadFromBitmapData((new BallImage1).bitmapData);
 			
+			texture1 = renderContext.createTexture(256, 256, Context3DTextureFormat.BGRA,false);
+			texture1.uploadFromBitmapData((new BallImage2).bitmapData);
+			
             //Upload programs to render context
             programPair = renderContext.createProgram();
             programPair.upload( vertexAssembly.agalcode, fragmentAssembly.agalcode );
             renderContext.setProgram( programPair );
-			
-			renderContext.setTextureAt(0, texture0);
             
             renderedBitmapData = new BitmapData( viewWidth, viewHeight, true );
             
@@ -120,11 +130,17 @@ package
 		 private function onLoop(event:Event ):void
 		 {
 			//Clear required before first drawTriangles() call
-			renderContext.clear( .0, .0, .0 );
+			renderContext.clear( .0, .0, .0 , 1, 1);
 			var f:Number = stage.mouseX / viewWidth;
-			renderContext.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([f,1,1,1])); //fc0
-			//Draw the 2 triangles
-			renderContext.drawTriangles( indexList);
+			renderContext.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([f, 1, 1, 1])); //fc0
+			
+			renderContext.setBlendFactors( Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO ); //No blending
+			renderContext.setTextureAt(0, texture0);
+			renderContext.drawTriangles( indexList, 0, 2);
+			
+			renderContext.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+			renderContext.setTextureAt(0, texture1);
+			renderContext.drawTriangles( indexList, 6,2);
 			//renderContext.drawToBitmapData( renderedBitmapData );
 			
 			renderContext.present();

@@ -29,6 +29,8 @@ package com.shader
 			fc5	 镜面的反射颜色	S_spec
 			fc27 常量[2,0,0,0]
 		*/
+			
+		/*
 		public static const F1:String = 
 		"tex ft1, v0, fs0<2d>\n" + 
 		"mul ft2.xyz, fc1.xyz, ft1.xyz \n" + 	//ft2.xyz=fc1.xyz*ft1.xyz
@@ -44,6 +46,18 @@ package com.shader
 		"mul ft1.xyz, ft0.xxx, fc5.xyz\n" +			//pow(n.h, m_gls) * S_spec
 		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +		//pow(n.h, m_gls) * S_spec * M_spec
 		"mov ft0.w,fc0.w\n" + 
+		"mov oc,ft0";
+		*/
+		public static const F1:String = 
+		"tex ft2, v0, fs0<2d>\n" + 
+		//ft2 材料的颜色
+
+		"dp3 ft1, v1.xyz, fc2.xyz\n" +				// n.h
+		"max ft1, ft1, fc2.wwww\n" +				// 至少为0
+		"pow ft0.x, ft1.x, fc4.x\n" +				//pow(n.h, m_gls)
+		"mul ft1.xyz, ft0.xxx, fc5.xyz\n" +			//pow(n.h, m_gls) * S_spec
+		"mul ft0.xyzw, ft1.xyzw, ft2.xyzw\n" +		//pow(n.h, m_gls) * S_spec * M_spec
+		//"mov ft0.w,fc0.w\n" + 
 		"mov oc,ft0";
 	}
 }
