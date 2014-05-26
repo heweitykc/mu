@@ -31,6 +31,7 @@ package
 		private function onMClick(evt:MouseEvent):void
 		{
 			_ps = new ParticleSystem();
+			_ps.addEffector(new Chamber(0,0,400,400));
 			_txt = new TextField();
 			addChild(_txt);
 			_txt.autoSize = TextFieldAutoSize.LEFT;
@@ -41,20 +42,25 @@ package
 		
 		private function step(evt:Event):void
 		{
-			var direct:Vector3D = sampleDirection().clone();
+			var direct:Vector3D = sampleDirection(Math.PI * 1.75, Math.PI * 2).clone();
 			direct.scaleBy(100);
-			_ps.emit(new Paricle(new Vector3D(stage.mouseX, stage.mouseY, 0), direct, 1, 0xFF0000, 5));
+			_ps.emit(new Particle(new Vector3D(stage.mouseX, stage.mouseY, 0), direct, 1, 0xFF0000, 5));
 			_ps.simulate(_dt);
 			
-			this.graphics.clear();
+			this.graphics.clear();			
+			
+			//graphics.beginFill(0x0, 0.1);
+			//graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			//graphics.endFill();
 			_ps.render(graphics);
 			
 			_txt.text = "粒子数量：" + _ps.num() + "";
+			
 		}
 		
-		private function sampleDirection():Vector3D
-		{
-			var theta:Number = Math.random() * 2 * Math.PI;
+		private function sampleDirection(angle1:Number, angle2:Number):Vector3D {
+			var t:Number = Math.random();
+			var theta:Number = angle1 * t + angle2 * (1 - t);
 			return new Vector3D(Math.cos(theta), Math.sin(theta));
 		}
 	}

@@ -8,18 +8,18 @@ package
 	 */
 	public class ParticleSystem 
 	{
-		private var _list:Vector.<Paricle>;
+		private var _list:Vector.<Particle>;
 		private var _gravity:Vector3D;
 		private var _effectors:Array;
 		
 		public function ParticleSystem() 
 		{
-			_list = new Vector.<Paricle>();
+			_list = new Vector.<Particle>();
 			_effectors = [];
 			_gravity = new Vector3D(0, 100, 0);
 		}
 		
-		public function emit(particle:Paricle):void
+		public function emit(particle:Particle):void
 		{
 			_list.push(particle);
 		}
@@ -32,10 +32,15 @@ package
 			kinematics(dt);
 		}
 		
+		public function addEffector(effector:*):void
+		{
+			_effectors.push(effector);
+		}
+		
 		private function aging(dt:Number):void
 		{
 			for (var i:int = 0; i < _list.length; i++) {
-				var p:Paricle = _list[i];
+				var p:Particle = _list[i];
 				p.age += dt;
 				if (p.age >= p.life)
 					kill(i);
@@ -46,7 +51,7 @@ package
 		
 		private function applyGravity():void
 		{
-			for each(var part:Paricle in _list)
+			for each(var part:Particle in _list)
 			{
 				part.acceleration = this._gravity;
 			}
@@ -54,12 +59,17 @@ package
 		
 		private function applyEffectors():void
 		{
-			
+			for each(var effector:* in _effectors) {
+				for each(var part:Particle in _list)
+				{
+					effector.apply(part);
+				}
+			}
 		}
 		
 		private function kinematics(dt:Number):void
 		{			
-			for each(var part:Paricle in _list)
+			for each(var part:Particle in _list)
 			{
 				var v:Vector3D = part.velocity.clone();
 				v.scaleBy(dt);
@@ -81,7 +91,7 @@ package
 		
 		public function render(g:Graphics):void
 		{
-			for each(var part:Paricle in _list)
+			for each(var part:Particle in _list)
 			{
 				var alpha:Number = 1 - part.age / part.life;
 				g.beginFill(part.color,alpha);
