@@ -35,14 +35,17 @@
       <path-element>D:\newcode\mu\render2bmp\src</path-element>
       <path-element>C:\Users\Userz\Downloads\FlashDevelop-4.5.2\Library\AS3\classes</path-element>
     </source-path>
+    <library-path append="true">
+      <path-element>D:\newcode\mu\render2bmp\src\assets.swc</path-element>
+    </library-path>
   </compiler>
   <file-specs>
-    <path-element>D:\newcode\mu\render2bmp\src\MapScroll.as</path-element>
+    <path-element>D:\newcode\mu\render2bmp\src\TestDemo.as</path-element>
   </file-specs>
   <default-background-color>#000000</default-background-color>
-  <default-frame-rate>2</default-frame-rate>
+  <default-frame-rate>60</default-frame-rate>
   <default-size>
-    <width>2048</width>
-    <height>512</height>
+    <width>1250</width>
+    <height>650</height>
   </default-size>
 </flex-config>

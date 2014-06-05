@@ -7,11 +7,30 @@ package com.td
 	 * ...
 	 * @author callee
 	 */
-	public class TwoDSprite extends EventDispatcher 
+	public class TwoDSprite extends SpriteBase 
 	{
-		public function TwoDSprite() 
+		public static const vertexData:Vector.<Number> = Vector.<Number>(
+			[
+			  // x, y, z    u, v
+				 1,  1, 0,   1,0,0,
+				-1,  1, 0,   0,0,1,
+				-1, -1, 0,   0,1,1,
+				 1, -1, 0,   1,1,0
+			]
+        );
+		public static const indexData:Vector.<uint> = Vector.<uint>( [0, 1, 2, 0, 2, 3] );
+		
+		private var _shader:Shader;
+		public function TwoDSprite(shader:Shader) 
 		{
-			super(target);
+			super();
+			_shader = shader;
+		}
+		
+		override protected function _render():void
+		{
+			_shader.useProg();
+			
 		}
 	}
 }

@@ -3,6 +3,8 @@ package
     import com.adobe.utils.AGALMiniAssembler;
 	import com.adobe.utils.PerspectiveMatrix3D;
 	import flash.display3D.textures.Texture;
+	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
     
     import flash.display.*;
     import flash.display.BitmapData;
@@ -23,6 +25,7 @@ package
 		[Embed(source="7.png")]
 		public static var BallImage1:Class;
         
+		private var _people:MovieClip;
         private var stage3D:Stage3D;
         private var renderContext:Context3D;
         private var indexList:IndexBuffer3D;
@@ -32,7 +35,9 @@ package
 		private var orthoMatrix:PerspectiveMatrix3D;
 		
         private const VERTEX_SHADER:String =
-            "mov op, va0 \n" +    					//copy position to output 
+			"mov vt0, va0 \n" + 
+			"add vt0.x, vt0.x, vc0.x \n" + 
+            "mov op, vt0 \n" +    					//copy position to output 
 			"mov v0, va1"
 			
         private const FRAGMENT_SHADER:String = 			
@@ -60,6 +65,7 @@ package
             stage3D = this.stage.stage3Ds[0];
 
 			stage.addEventListener(Event.RESIZE, onResize);
+			stage.addEventListener(MouseEvent.CLICK, onClick);
             //Add event listener before requesting the context
             stage3D.addEventListener( Event.CONTEXT3D_CREATE, contextCreated );            
             stage3D.requestContext3D( Context3DRenderMode.AUTO );
@@ -68,6 +74,13 @@ package
             vertexAssembly.assemble( Context3DProgramType.VERTEX, VERTEX_SHADER, 1,false );
             fragmentAssembly.assemble( Context3DProgramType.FRAGMENT, FRAGMENT_SHADER, 1, false);			
         }
+		
+		private var _targetX:int = 0;
+		private var _targetY:int = 0;
+		private function onClick( evt:MouseEvent ):void
+		{
+			_targetX = this.mouseX;
+		}
         
 		private function onResize( event:Event ):void
 		{
@@ -96,8 +109,13 @@ package
         //Note, context3DCreate event can happen at any time, such as when the hardware resources are taken by another process
         private function contextCreated( event:Event ):void
         {
+			_people = new people;
+			addChild(_people);
+			_people.x = stage.stageWidth / 2;
+			_people.y = 500;
 			trace("contextCreated," +  stage.stageWidth + "*" +   stage.stageHeight);
 			_bg = new BallImage1;
+			_maprect.x = -_bg.width/2;
 			
             renderContext = Stage3D( event.target ).context3D;
             trace( "3D driver: " + renderContext.driverInfo );
@@ -124,17 +142,34 @@ package
 			this.addEventListener(Event.ENTER_FRAME, onLoop);
         }
 		
-		 private function onLoop(event:Event ):void
-		 {
+		private var _maprect:Rectangle = new Rectangle(0,0);
+		private var _dx:int = 4;
+		private function onLoop(event:Event):void
+		{
+			/*
+			var diff:int = _targetX - _maprect.x + stage.stageWidth/2;
+			if (diff > _dx) {
+				if (_people.currentFrame < 41) _people.gotoAndPlay(41);
+				//_people.x += _dx;
+				_maprect.x += _dx;
+				_people.scaleX = 1;
+			} else if (diff < -_dx) {
+				if (_people.currentFrame < 41) _people.gotoAndPlay(41);
+				//_people.x -= _dx;
+				_maprect.x -= _dx;
+				_people.scaleX = -1;
+			} else {
+				if (_people.currentFrame > 40) _people.gotoAndPlay(1);
+			}
+			*/
 			//Clear required before first drawTriangles() call
 			renderContext.clear( .0, .0, .0 , 1, 1);
-			
+			renderContext.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([_maprect.x*_xRatio,0,0,0]));
 			//renderContext.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, orthoMatrix);
 			//renderContext.setBlendFactors( Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO ); //No blending
 			renderContext.setTextureAt(0, texture0);
 			renderContext.drawTriangles( indexList, 0, 2);
-			
 			renderContext.present();
-		 }
+		}
     }
 }
