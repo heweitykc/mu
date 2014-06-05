@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2014/6/5'</value>
+      <value>'2014/5/26'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -32,17 +32,17 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>D:\newcode\mu\render2bmp\src</path-element>
+      <path-element>D:\newcode\mu\particle\src</path-element>
       <path-element>C:\Users\Userz\Downloads\FlashDevelop-4.5.2\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>D:\newcode\mu\render2bmp\src\MapScroll.as</path-element>
+    <path-element>D:\newcode\mu\particle\src\PSysDemo.as</path-element>
   </file-specs>
-  <default-background-color>#000000</default-background-color>
-  <default-frame-rate>2</default-frame-rate>
+  <default-background-color>#FFFFFF</default-background-color>
+  <default-frame-rate>60</default-frame-rate>
   <default-size>
-    <width>2048</width>
-    <height>512</height>
+    <width>800</width>
+    <height>600</height>
   </default-size>
 </flex-config>
