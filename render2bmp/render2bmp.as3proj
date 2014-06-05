@@ -5,8 +5,8 @@
     <movie outputType="Application" />
     <movie input="" />
     <movie path="bin\render2bmp.swf" />
-    <movie fps="30" />
-    <movie width="1024" />
+    <movie fps="2" />
+    <movie width="2048" />
     <movie height="512" />
     <movie version="11" />
     <movie minorVersion="4" />
@@ -72,7 +72,7 @@
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\Main.as" />
+    <compile path="src\MapScroll.as" />
   </compileTargets>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>

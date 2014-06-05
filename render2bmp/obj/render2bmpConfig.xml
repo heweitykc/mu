@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2014/5/13'</value>
+      <value>'2014/6/5'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -37,12 +37,12 @@
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>D:\newcode\mu\render2bmp\src\Main.as</path-element>
+    <path-element>D:\newcode\mu\render2bmp\src\MapScroll.as</path-element>
   </file-specs>
   <default-background-color>#000000</default-background-color>
-  <default-frame-rate>30</default-frame-rate>
+  <default-frame-rate>2</default-frame-rate>
   <default-size>
-    <width>1024</width>
+    <width>2048</width>
     <height>512</height>
   </default-size>
 </flex-config>
