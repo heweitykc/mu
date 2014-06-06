@@ -16,7 +16,12 @@ exports.clientIn = function (socket){
 
     //接收到数据
     socket.on('data',function(data){
-        console.log('recv:' + data);
+		if(data == "q"){
+			socket.end();
+		} else {
+			
+		}
+        console.log('recv:' + (data));
     });
 
     //数据错误事件
@@ -29,6 +34,7 @@ exports.clientIn = function (socket){
     socket.on('close',function(data){
         console.log('client close: ' +
             socket.remoteAddress + ' ' + socket.remotePort);
+		socket.destroy();
     });
 }
 
