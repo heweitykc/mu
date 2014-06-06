@@ -14,4 +14,6 @@ server.on('listening',function(){
 //服务器错误事件
 server.on("error",function(exception){
     console.log("server error:" + exception);
-}); 
+});
+
+setInterval(game.mainloop, 300);
