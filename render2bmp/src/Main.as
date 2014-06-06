@@ -35,7 +35,6 @@ package
         private var vertexes:VertexBuffer3D;
 		private var texture0:Texture;
 		private var texture1:Texture;
-        private var renderedBitmapData:BitmapData;
 		
         private const VERTEX_SHADER:String =
 			"mul vt0.xyzw, va0.xyzw, vc0.xyzx \n" + 
@@ -91,10 +90,10 @@ package
                     -1, -1, 0,  0,1,1,
                     1, -1, 0,    1, 1, 0,
 					
-					0.7*0.5, 0.7, 0,   0.7,0,0,
-                    -0.7*0.5, 0.7, 0,   0,0,0.7,
-                    -0.7*0.5, -0.7, 0,  0,0.7,0.7,
-                    0.7*0.5,-0.7, 0,    0.7,0.7,0
+					0.7*0.5, 0.7, 0,   1,0,0,
+                    -0.7*0.5, 0.7, 0,   0,0,1,
+                    -0.7*0.5, -0.7, 0,  0,1,0.7,
+                    0.7*0.5,-0.7, 0,    1,1,0
                 ]
             );
             vertexes = renderContext.createVertexBuffer( vertexData.length/dataPerVertex, dataPerVertex );
@@ -114,15 +113,6 @@ package
             programPair = renderContext.createProgram();
             programPair.upload( vertexAssembly.agalcode, fragmentAssembly.agalcode );
             renderContext.setProgram( programPair );
-            
-            renderedBitmapData = new BitmapData( viewWidth, viewHeight, true );
-            
-            //Add to stage
-            bitmap = new Bitmap( renderedBitmapData );
-            //this.addChild( bitmap );
-            bitmap.x = 0;
-            bitmap.y = 0;
-            bitmap.filters = [new DropShadowFilter( 8, 235, .4 )];
 			
 			this.addEventListener(Event.ENTER_FRAME, onLoop);
         }
@@ -141,7 +131,6 @@ package
 			renderContext.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
 			renderContext.setTextureAt(0, texture1);
 			renderContext.drawTriangles( indexList, 6,2);
-			//renderContext.drawToBitmapData( renderedBitmapData );
 			
 			renderContext.present();
 		 }
