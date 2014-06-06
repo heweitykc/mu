@@ -11,12 +11,16 @@ package com.td
 	{
 		public var x:Number;
 		public var y:Number;
+		public var width:Number;
+		public var height:Number;
 		
 		private var _children:Array;
 		
 		public function SpriteBase() 
 		{
 			_children = [];
+			x = 0;
+			y = 0;
 		}
 		
 		public function addChild(child:SpriteBase):void
@@ -24,18 +28,26 @@ package com.td
 			_children.push(child);
 		}
 		
+		public function resize():void
+		{
+			for each(var child:SpriteBase in _children) {
+				child.resize();
+			}
+		}
+		
 		protected function _render():void
 		{
 			
 		}
 		
-		private function render():void
+		public function render():void
 		{
 			_render();
 			for each(var child:SpriteBase in _children) {
 				child.render();
 			}
 		}
+		
 	}
 
 }

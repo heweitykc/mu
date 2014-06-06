@@ -7,14 +7,14 @@ package com.td
 	 * ...
 	 * @author callee
 	 */
-	public class Shader 
+	public class Shaders 
 	{	
 		private var _vertexAssembly:AGALMiniAssembler = new AGALMiniAssembler();
         private var _fragmentAssembly:AGALMiniAssembler = new AGALMiniAssembler();
 		private var _programPair:Program3D;
 		private var _context3d:Context3D;
 		
-		public function Shader(vcode:String, fcode:String, context:Context3D) 
+		public function Shaders(vcode:String, fcode:String, context:Context3D) 
 		{
 			_context3d = context;
             _vertexAssembly.assemble( Context3DProgramType.VERTEX, vcode, 1,false );
