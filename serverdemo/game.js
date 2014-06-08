@@ -1,5 +1,6 @@
 var timeout = 20000;//超时
 var clients = [];
+var stime = 0;
 
 exports.clientIn = function (socket){
 	// 我们获得一个连接 - 该连接自动关联一个socket对象
@@ -38,8 +39,14 @@ exports.clientIn = function (socket){
     });
 }
 
+exports.mainstart = function(){
+	stime = process.hrtime();
+}
+
 exports.mainloop = function (){
-	console.log('当前情况。。。');
+	var delta = process.hrtime(stime);
+	stime = process.hrtime();
+	console.log('frame。。。' + delta);
 	for(var i=0;i<clients.length;i++){
 		var sock = clients[i].sock;
 		console.log('在线：' + sock.remoteAddress);
