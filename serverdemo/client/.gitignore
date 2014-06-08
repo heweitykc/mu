@@ -1,8 +1,0 @@
-/Temp
-/Library
-/obj
-*.csproj
-*.unityproj
-*.sln
-*.pidb
-.DS_Store
