@@ -17,4 +17,4 @@ server.on("error",function(exception){
 });
 
 game.mainstart();
-setInterval(game.mainloop, 33);
+setInterval(game.mainloop, 500);

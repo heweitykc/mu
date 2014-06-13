@@ -46,7 +46,7 @@ exports.mainstart = function(){
 exports.mainloop = function (){
 	var delta = process.hrtime(stime);
 	stime = process.hrtime();
-	console.log('frame。。。' + delta);
+	//console.log('frame。。。' + delta);
 	for(var i=0;i<clients.length;i++){
 		var sock = clients[i].sock;
 		console.log('在线：' + sock.remoteAddress);
